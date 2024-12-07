@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>NAM GPT</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            background-color: #1c1e22; /* Màu nền chế độ tối */
+            color: #eaeaea; /* Màu chữ sáng */
+            transition: margin-left 0.3s;
+        }
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px; /* Ẩn sidebar ban đầu */
+            background-color: #2a2b2e; /* Màu nền sidebar chế độ tối */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: left 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto; /* Thêm tính năng cuộn cho sidebar */
+        }
+        .sidebar.open {
+            left: 0;
+        }
+        .content {
+            margin-left: 0;
+            padding: 20px;
+            width: 100%;
+            transition: margin-left 0.3s;
+        }
+        .content.sidebar-open {
+            margin-left: 250px;
+        }
+        .toggle-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        .toggle-btn.close {
+            left: 270px; /* Đặt vị trí nút đóng */
+        }
+        .chat-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #2a2b2e;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .chat-box {
+            border: 1px solid #444;
+            padding: 10px;
+            margin-bottom: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            background: #333;
+        }
+        .input-container {
+            display: flex;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #333;
+            color: #eaeaea;
+        }
+        button {
+            padding: 10px;
+            margin-left: 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .sidebar-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+        video, audio {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        table {
+            width: 60%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #444;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        ol, ul {
+            text-align: left;
+            margin: 0 auto;
+            padding-left: 20px;
+            width: 60%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Nút mở/đóng sidebar -->
+    <button class="toggle-btn" id="toggleBtn" onclick="toggleSidebar()">Mở Sidebar</button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <h3>NAM GPT</h3>
+        <p>Trợ lý AI của bạn</p>
+
+        <div class="sidebar-content">
+            <h4>Một Số Chatbot Khác:</h4>
+            <ul>
+                <li><a href="https://chatgpt.com" target="_blank">Truy cập ChatGPT</a></li>
+                <li><a href="https://poe.com" target="_blank">Truy cập Poe</a></li>
+                <li><a href="https://copilot.microsoft.com" target="_blank">Truy cập Copilot</a></li>
+            </ul>
+
+            <h3>Hướng Dẫn Sử Dụng</h3>
+            <ol>
+                <li>Nhập câu hỏi vào hộp thoại</li>
+                <li>Bấm nút gửi</li>
+                <li>Nhận câu trả lời</li>
+            </ol>
+
+            <h3>Những Thứ NAM GPT Có Thể Mang Lại Cho Bạn</h3>
+            <ul>
+                <li>Hỗ trợ học tập</li>
+                <li>Trả lời câu hỏi</li>
+                <li>Thư giãn với giải trí</li>
+            </ul>
+
+            <!-- Hình ảnh, Video, Âm thanh -->
+            <h3>You Know This One</h3>
+            <img src="eldenring.jpg" alt="Hình minh họa">
+
+            <h3>A Video Make You Smile</h3>
+            <video controls>
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+            </video>
+
+            <h3>A Song Make You Cry</h3>
+            <audio controls>
+                <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+    </div>
+
+    <!-- Nội dung chính -->
+    <div class="content" id="content">
+        <div class="chat-container">
+            <h2>NAM GPT</h2>
+            <div class="chat-box" id="chatBox">
+                <p><strong>Nam:</strong> Xin chào! Tôi có thể giúp gì cho bạn?</p>
+            </div>
+            <div class="input-container">
+                <input type="text" id="userInput" placeholder="Nhập tin nhắn của bạn..." />
+                <button onclick="sendMessage()">Gửi</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const chatBox = document.getElementById('chatBox');
+            const userInput = document.getElementById('userInput');
+            const userMessage = userInput.value.trim();
+
+            if (userMessage === '') return;
+
+            const userBubble = document.createElement('p');
+            userBubble.innerHTML = `<strong>You:</strong> ${userMessage}`;
+            chatBox.appendChild(userBubble);
+
+            const botBubble = document.createElement('p');
+            botBubble.innerHTML = `<strong>Nam:</strong> Hãy cho em 10 điểm!`;
+            chatBox.appendChild(botBubble);
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            userInput.value = '';
+        }
+
+        // Hàm mở/đóng sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            const toggleBtn = document.getElementById('toggleBtn');
+
+            sidebar.classList.toggle('open');
+            content.classList.toggle('sidebar-open');
+
+            // Thay đổi nút mở thành đóng khi sidebar mở
+            if (sidebar.classList.contains('open')) {
+                toggleBtn.textContent = 'Đóng Sidebar';
+                toggleBtn.classList.add('close');
+            } else {
+                toggleBtn.textContent = 'Mở Sidebar';
+                toggleBtn.classList.remove('close');
+            }
+        }
+    </script>
+
+</body>
+</html>
